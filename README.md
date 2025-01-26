@@ -10,7 +10,8 @@ Script designed for easy management of player statistics and other data
 
 Example code.
 
----lua
+```lua
+
 --fxmanifest.lua
 lua54 'yes'
 
@@ -35,4 +36,4 @@ print(miner_player_state.experience) -- 5
 miner_player_state.other_data = "Some Data"
 print(miner_player_state.other_data) -- nil, only the fields set in CreateState are present.
 
----
+```
