@@ -1,3 +1,4 @@
+local ESX = GetResourceState("es_extended") == "started" and exports.es_extended:getSharedObject()
 local esxIdentifier = ESX and ESX.GetPlayerFromId
 local _type = type
 
