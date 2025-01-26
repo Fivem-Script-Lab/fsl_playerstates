@@ -21,7 +21,7 @@ server_scripts {
 }
 
 --server.lua
-CreateState({
+CreateState("miner_data", {
   experience = 0
 })
 local MiningState = GetState("miner_data")
