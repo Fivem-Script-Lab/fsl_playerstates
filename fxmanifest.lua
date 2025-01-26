@@ -12,6 +12,5 @@ server_scripts {
     '@es_extended/imports.lua',
     '@oxmysql/lib/MySQL.lua',
     'server/db.lua',
-    'server/player_identifier.lua',
-    'server/state.lua'
+    'server/player_identifier.lua'
 }

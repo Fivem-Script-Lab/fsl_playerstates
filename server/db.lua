@@ -1,12 +1,14 @@
 local DB = exports.DatabaseManager:GetDatabaseTableManager("player_states")
 
-DB.Create({
-    {"id", "INT(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT"},
-    {"state", "VARCHAR(255) NOT NULL"},
-    {"resource", "VARCHAR(255) NULL"},
-    {"identifier", "VARCHAR(255) NOT NULL"},
-    {"data", "LONGTEXT NULL DEFAULT '[]'"}
-})
+CreateThread(function()
+    DB.Create({
+        {"id", "INT(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT"},
+        {"state", "VARCHAR(255) NOT NULL"},
+        {"resource", "VARCHAR(255) NULL"},
+        {"identifier", "VARCHAR(255) NOT NULL"},
+        {"data", "LONGTEXT NULL DEFAULT '[]'"}
+    })
+end)
 
 local DB_SELECT_USER = DB.Prepare.Select({"state", "resource", "identifier"})
 local DB_INSERT_USER = DB.Prepare.Insert({"state", "resource", "identifier"})
@@ -35,3 +37,8 @@ end
 function SetPlayerStateAsync(id, res, iden, data)
     return DB_UPDATE_ASYNC_USER.execute({json.encode(data)}, {id, res, iden})
 end
+
+exports("EnsurePlayerState", EnsurePlayerState)
+exports("GetPlayerState", GetPlayerState)
+exports("SetPlayerState", SetPlayerState)
+exports("SetPlayerStateAsync", SetPlayerStateAsync)
