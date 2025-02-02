@@ -1,4 +1,4 @@
-local DB = exports.DatabaseManager:GetDatabaseTableManager("player_states")
+local DB = exports.DatabaseManager:GetDatabaseTableManager("player_states2")
 
 CreateThread(function()
     DB.Create({
@@ -13,10 +13,14 @@ end)
 local DB_SELECT_USER = DB.Prepare.Select({"state", "resource", "identifier"})
 local DB_INSERT_USER = DB.Prepare.Insert({"state", "resource", "identifier"})
 
-function EnsurePlayerState(id, res, iden)
-    local data = DB_SELECT_USER.execute(id, res, iden)
+---@param id string
+---@param resource string|nil
+---@param identifier string
+---@return boolean
+function EnsurePlayerState(id, resource, identifier)
+    local data = DB_SELECT_USER.execute(id, resource, identifier)
     if not data then
-        return DB_INSERT_USER.execute(id, res, iden) ~= 0
+        return DB_INSERT_USER.execute(id, resource, identifier) ~= 0
     end
     return true
 end
@@ -24,18 +28,32 @@ end
 local DB_UPDATE_USER = DB.Prepare.Update({"data"}, {"state", "resource", "identifier"})
 local DB_UPDATE_ASYNC_USER = DB.Prepare.Update({"data"}, {"state", "resource", "identifier"}, false)
 
-function SetPlayerState(id, res, iden, data)
-    return DB_UPDATE_USER.execute({json.encode(data)}, {id, res, iden})
+---@param id string
+---@param resource string|nil
+---@param identifier string
+---@param data any
+---@return boolean
+function SetPlayerState(id, resource, identifier, data)
+    return DB_UPDATE_USER.execute({json.encode(data)}, {id, resource, identifier})
 end
 
-function GetPlayerState(id, res, iden)
-    local data = DB_SELECT_USER.execute(id, res, iden)
+---@param id string
+---@param resource string|nil
+---@param identifier string
+---@return table|nil
+function GetPlayerState(id, resource, identifier)
+    local data = DB_SELECT_USER.execute(id, resource, identifier)
     if not data then return nil end
     return json.decode(data.data)
 end
 
-function SetPlayerStateAsync(id, res, iden, data)
-    return DB_UPDATE_ASYNC_USER.execute({json.encode(data)}, {id, res, iden})
+---@param id string
+---@param resource string|nil
+---@param identifier string
+---@param data any
+---@return boolean
+function SetPlayerStateAsync(id, resource, identifier, data)
+    return DB_UPDATE_ASYNC_USER.execute({json.encode(data)}, {id, resource, identifier})
 end
 
 exports("EnsurePlayerState", EnsurePlayerState)
